@@ -11,10 +11,10 @@ import os
 
 from fastapi import FastAPI
 
-from ingestion import run_ingestion, _get_pdfs_from_dir
-from vector_store import get_or_create_index
-from query_pipeline import QueryPipeline
-from route import router, init_router
+from .ingestion import run_ingestion, _get_pdfs_from_dir
+from .vector_store import get_or_create_index
+from .query_pipeline import QueryPipeline
+from .route import router, init_router
 
 PDF_DIR = "src/pdfs"
 

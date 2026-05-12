@@ -6,8 +6,8 @@ Conversation history is passed as the messages array directly.
 """
 
 import anthropic
-from config import ANTHROPIC_API_KEY, CLAUDE_SONNET_MODEL, LLM_MAX_TOKENS, LLM_TEMPERATURE
-from context_builder import BuiltContext
+from .config import ANTHROPIC_API_KEY, CLAUDE_SONNET_MODEL, LLM_MAX_TOKENS, LLM_TEMPERATURE
+from .context_builder import BuiltContext
 
 _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 

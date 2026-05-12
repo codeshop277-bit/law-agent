@@ -6,7 +6,7 @@ Uses Claude Haiku — fast and cheap for this lightweight task.
 
 import json
 import anthropic
-from config import ANTHROPIC_API_KEY, CLAUDE_HAIKU_MODEL
+from .config import ANTHROPIC_API_KEY, CLAUDE_HAIKU_MODEL
 
 _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 

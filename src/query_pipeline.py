@@ -29,14 +29,14 @@ Usage:
 
 from urllib import response
 
-from vector_store import get_or_create_index, similarity_search
-from embedder import embed_query
-from query_refiner import refine_query
-from reranker import rerank_chunks
-from web_fallback import should_use_fallback, fetch_web_context, build_fallback_context
-from context_builder import build_context
-from llm_generator import generate_response
-from conversation_memory import ConversationMemory
+from .vector_store import get_or_create_index, similarity_search
+from .embedder import embed_query
+from .query_refiner import refine_query
+from .reranker import rerank_chunks
+from .web_fallback import should_use_fallback, fetch_web_context, build_fallback_context
+from .context_builder import build_context
+from .llm_generator import generate_response
+from .conversation_memory import ConversationMemory
 
 
 class QueryPipeline:

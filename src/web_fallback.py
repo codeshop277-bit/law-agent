@@ -7,7 +7,7 @@ Claude Haiku summarises the raw results into clean context.
 
 import anthropic
 from duckduckgo_search import DDGS
-from config import ANTHROPIC_API_KEY, CLAUDE_HAIKU_MODEL, RELEVANCE_THRESHOLD, WEB_FALLBACK_MAX_RESULTS
+from .config import ANTHROPIC_API_KEY, CLAUDE_HAIKU_MODEL, RELEVANCE_THRESHOLD, WEB_FALLBACK_MAX_RESULTS
 
 _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 

@@ -9,8 +9,8 @@ import re
 from dataclasses import dataclass
 from typing import Optional
 
-from config import CHUNK_SIZE, CHUNK_OVERLAP, MIN_CHUNK_LENGTH
-from pdf_parser import PageContent
+from .config import CHUNK_SIZE, CHUNK_OVERLAP, MIN_CHUNK_LENGTH
+from .pdf_parser import PageContent
 
 
 @dataclass

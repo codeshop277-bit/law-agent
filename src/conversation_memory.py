@@ -12,7 +12,7 @@ On PDF swap, memory should be cleared via reset().
 """
 
 from dataclasses import dataclass, field
-from config import MAX_HISTORY_TURNS
+from .config import MAX_HISTORY_TURNS
 
 
 @dataclass

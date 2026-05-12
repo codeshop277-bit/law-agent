@@ -7,6 +7,7 @@ load_dotenv()
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 CLAUDE_CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
 # Pinecone settings
 PINECONE_INDEX_NAME = "study-materials"

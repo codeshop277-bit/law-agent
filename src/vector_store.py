@@ -11,7 +11,7 @@ Manages all Pinecone interactions:
 import time
 from pinecone import Pinecone, ServerlessSpec
 
-from config import (
+from .config import (
     PINECONE_API_KEY,
     PINECONE_INDEX_NAME,
     PINECONE_NAMESPACE,
@@ -110,7 +110,14 @@ def similarity_search(index, query_vector: list[float], top_k: int = 20) -> list
         namespace=PINECONE_NAMESPACE,
         include_metadata=True,
     )
-    return result.get("matches", [])
+    return [
+    {
+        "id":       match.id,
+        "score":    match.score,
+        "metadata": match.metadata,
+    }
+    for match in result.matches
+]
 
 
 def get_index_stats(index) -> dict:

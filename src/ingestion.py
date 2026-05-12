@@ -13,10 +13,10 @@ import os
 import sys
 import time
 
-from pdf_parser import extract_pdf
-from chunker import chunk_pages
-from embedder import embed_chunks
-from vector_store import get_or_create_index, clear_namespace, upsert_vectors, get_index_stats
+from .pdf_parser import extract_pdf
+from .chunker import chunk_pages
+from .embedder import embed_chunks
+from .vector_store import get_or_create_index, clear_namespace, upsert_vectors, get_index_stats
 
 # Default folder to look for PDFs if no paths are provided
 DEFAULT_PDF_DIR = "./pdfs"

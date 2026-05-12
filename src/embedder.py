@@ -6,8 +6,8 @@ Model downloads once (~90MB) and is cached at ~/.cache/torch/sentence_transforme
 """
 
 from sentence_transformers import SentenceTransformer
-from config import EMBEDDING_MODEL, EMBEDDING_BATCH_SIZE
-from chunker import TextChunk
+from .config import EMBEDDING_MODEL, EMBEDDING_BATCH_SIZE
+from .chunker import TextChunk
 
 # Load once at import time — subsequent calls use the cached model
 _model = SentenceTransformer(EMBEDDING_MODEL)
@@ -22,12 +22,12 @@ def embed_chunks(chunks: list[TextChunk]) -> list[dict]:
 
     print(f"  [Embedder] Encoding {len(texts)} chunks locally...")
     # batch_size controls GPU/CPU memory usage — 64 is safe for most machines
-    embeddings = _model.encode(
+    result = _model.encode(
         texts,
         batch_size=64,
         show_progress_bar=True,
-        convert_to_list=True,
     )
+    embeddings = result.tolist() 
 
     vectors = []
     for chunk, embedding in zip(chunks, embeddings):
@@ -52,5 +52,6 @@ def embed_query(query: str) -> list[float]:
     Embed a single query using the same local model.
     Must use the same model as ingestion — mixing models breaks similarity search.
     """
-    embedding = _model.encode(query, convert_to_list=True)
-    return embedding
+    result = _model.encode(query)
+    embeddings = result.tolist() 
+    return embeddings

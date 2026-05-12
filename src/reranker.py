@@ -6,7 +6,7 @@ Uses Claude Haiku — scores all 20 candidates in one call.
 
 import json
 import anthropic
-from config import ANTHROPIC_API_KEY, CLAUDE_HAIKU_MODEL, RERANK_TOP_N
+from .config import ANTHROPIC_API_KEY, CLAUDE_HAIKU_MODEL, RERANK_TOP_N
 
 _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
@@ -53,8 +53,12 @@ def rerank_chunks(query: str, candidates: list[dict]) -> list[dict]:
 
     scored = []
     for idx, match in enumerate(candidates):
-        enriched = dict(match)
-        enriched["rerank_score"] = score_map.get(idx, 0.0)
+        enriched = {
+        "id":           match["id"],
+        "score":        match["score"],
+        "metadata":     match["metadata"],
+        "rerank_score": score_map.get(idx, 0.0),
+        }
         scored.append(enriched)
 
     scored.sort(key=lambda x: x["rerank_score"], reverse=True)

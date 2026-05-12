@@ -10,7 +10,7 @@ Two endpoints:
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from query_pipeline import QueryPipeline
+from .query_pipeline import QueryPipeline
 
 router = APIRouter()
 
