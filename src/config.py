@@ -32,6 +32,7 @@ PINECONE_DIMENSION   = 384
 # LLM settings
 LLM_MODEL = "gpt-4o"
 LLM_MAX_TOKENS = 1024
+LLM_MAX_TOKENS_BROAD = 6000
 LLM_TEMPERATURE = 0.3             # low = focused, factual responses
 
 # Retrieval settings

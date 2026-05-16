@@ -6,7 +6,7 @@ Conversation history is passed as the messages array directly.
 """
 
 import anthropic
-from .config import ANTHROPIC_API_KEY, CLAUDE_SONNET_MODEL, LLM_MAX_TOKENS, LLM_TEMPERATURE
+from .config import ANTHROPIC_API_KEY, CLAUDE_SONNET_MODEL, LLM_MAX_TOKENS, LLM_TEMPERATURE, LLM_MAX_TOKENS_BROAD
 from .context_builder import BuiltContext
 
 _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
@@ -23,39 +23,46 @@ Behaviour rules:
 6. If the context lacks enough information, say so clearly. Do NOT make up an answer.
 7. Keep responses under 300 words unless the topic genuinely requires more depth."""
 
+_BROAD_INSTRUCTION = """
+8. This is a broad compile/timeline/summary request.
+   - Format the response as a numbered chronological list.
+   - Group events by unit or chapter using the source metadata.
+   - Cover all units mentioned in the query — do not stop at the first unit.
+   - You may exceed 300 words for complete coverage across all units."""
+
 
 def generate_response(
     refined_query: str,
     built_context: BuiltContext,
     history: list[dict],
+    is_broad: bool = False,
 ) -> str:
-    """
-    Build the message array and call Claude Sonnet with streaming.
-
-    Anthropic's messages API takes history as alternating user/assistant turns.
-    The current query + context goes in as the final user message.
-    """
     user_turn = (
         f"{built_context.context_text}\n\n"
         f"Question: {refined_query}"
     )
 
-    # history is already in {"role": "user/assistant", "content": "..."} format
     messages = [
         *history,
         {"role": "user", "content": user_turn},
     ]
 
-    print(f"  [LLM] Calling {CLAUDE_SONNET_MODEL} (history turns: {len(history) // 2})")
+    # Append broad instruction to system prompt when needed
+    system = _SYSTEM_PROMPT + (_BROAD_INSTRUCTION if is_broad else "")
+
+    # Allow more tokens for broad queries so output isn't cut off mid-way
+    max_tokens = LLM_MAX_TOKENS_BROAD if is_broad else LLM_MAX_TOKENS
+
+    print(f"  [LLM] Calling {CLAUDE_SONNET_MODEL} (history turns: {len(history) // 2}, broad={is_broad})")
     print("\n" + "─" * 55)
 
     full_response = ""
 
     with _client.messages.stream(
         model=CLAUDE_SONNET_MODEL,
-        max_tokens=LLM_MAX_TOKENS,
+        max_tokens=max_tokens,
         temperature=LLM_TEMPERATURE,
-        system=_SYSTEM_PROMPT,
+        system=system,
         messages=messages,
     ) as stream:
         for text in stream.text_stream:

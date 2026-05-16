@@ -14,16 +14,21 @@ _RERANK_PROMPT = """You are a relevance scoring assistant for a study revision t
 Score each chunk for relevance to the query on a scale of 0.0 to 1.0.
 
   1.0   — directly and fully answers the query
-  0.7-0.9 — highly relevant
-  0.4-0.6 — partially relevant
+  0.7-0.9 — highly relevant, covers the topic or contains key facts about it
+  0.4-0.6 — partially relevant, mentions related concepts or events
   0.0-0.3 — not relevant
+
+IMPORTANT: If the query is a broad compile, timeline, or summary request across
+multiple units or chapters, score ANY chunk that contains historical events,
+dates, facts, or topic content from those units as 0.7 or above.
+Do not penalise chunks for being partial — they are meant to be combined.
 
 Return ONLY a valid JSON array with "index" and "score" fields. No preamble, no markdown.
 
 Example: [{"index": 0, "score": 0.95}, {"index": 1, "score": 0.3}]"""
 
 
-def rerank_chunks(query: str, candidates: list[dict]) -> list[dict]:
+def rerank_chunks(query: str, candidates: list[dict],  top_n: int = RERANK_TOP_N) -> list[dict]:
     if not candidates:
         return []
 
@@ -62,7 +67,7 @@ def rerank_chunks(query: str, candidates: list[dict]) -> list[dict]:
         scored.append(enriched)
 
     scored.sort(key=lambda x: x["rerank_score"], reverse=True)
-    top_chunks = scored[:RERANK_TOP_N]
+    top_chunks = scored[:top_n]
 
     print(f"  [Reranker] {len(candidates)} candidates → top {len(top_chunks)} selected")
     for c in top_chunks:
